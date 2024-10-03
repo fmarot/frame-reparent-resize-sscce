@@ -10,9 +10,9 @@ Sample to demonstrate the problem of reparented JFrames when their parent frame 
 It seems lile the movement applied depends upon the upper left coordinate of the parent frame.
 This problem started in Java 16 and is not present up to Java 15.
 
-This problem is showcased in class JFrameSampleWithJava16Problem.java
+This problem is showcased in class `JFrameSampleWithJava16Problem.java`
 
-An alternative implementation in NoProblem.java uses a sun.awt.windows.WEmbeddedFrame and has no such weird behaviour.
+An alternative implementation in `NoProblem.java` uses a `sun.awt.windows.WEmbeddedFrame` and has no such weird behaviour.
 
 == How to run
 
@@ -33,4 +33,4 @@ This sample behaves correctly.
 
 == The hack
 
-In JFrameSampleWithJava16Problem.java, a boolean 'hackForJava16Plus' may be set to true to activate a hack hiding the problem on Java16+
+In `JFrameSampleWithJava16Problem.java`, a boolean `hackForJava16Plus` may be set to true to activate a hack hiding the problem on Java16+
