@@ -4,7 +4,7 @@ demo of problem when reparenting a JFrame
 
 toc::[]
 
-Note: a SSCCE is a Short, Self Contained, Correct (Compilable), Example - see https://sscce.org/
+(Note: a SSCCE is a Short, Self Contained, Correct (Compilable), Example - see https://sscce.org/ )
 
 Sample to demonstrate the problem of reparented JFrames when their parent frame moves: the reparented child frame also moves inside its parent, it doe snot only follow along. Like if it was moved twice.
 It seems lile the movement applied depends upon the upper left coordinate of the parent frame.
@@ -13,6 +13,13 @@ This problem started in Java 16 and is not present up to Java 15.
 This problem is showcased in class `JFrameSampleWithJava16Problem.java`
 
 An alternative implementation in `NoProblem.java` uses a `sun.awt.windows.WEmbeddedFrame` and has no such weird behaviour.
+
+[cols="col1,col2", frame=none, grid=none]
+|===
+| image::imagesdir/reparentedJFrame.png[scaledwidth="75%"]
+| image::imagesdir/sun.awt.windows.WEmbeddedFrame.png[scaledwidth="75%"]
+|===
+
 
 == How to run
 
