@@ -14,9 +14,9 @@ This problem is showcased in class `JFrameSampleWithJava16Problem.java`
 
 An alternative implementation in `NoProblem.java` uses a `sun.awt.windows.WEmbeddedFrame` and has no such weird behaviour.
 
-[cols="col1,col2", frame=none, grid=none]
+[cols="a,a", frame=none, grid=none]
 |===
-| image::reparentedJFrame.png[scaledwidth="75%"]
+| image::imagesdir/reparentedJFrame.png[scaledwidth="75%"]
 | image::imagesdir/sun.awt.windows.WEmbeddedFrame.png[scaledwidth="75%"]
 |===
 
