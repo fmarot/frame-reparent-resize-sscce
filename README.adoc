@@ -16,10 +16,11 @@ An alternative implementation in `NoProblem.java` uses a `sun.awt.windows.WEmbed
 
 [cols="col1,col2", frame=none, grid=none]
 |===
-| image::imagesdir/reparentedJFrame.png[scaledwidth="75%"]
+| image::reparentedJFrame.png[scaledwidth="75%"]
 | image::imagesdir/sun.awt.windows.WEmbeddedFrame.png[scaledwidth="75%"]
 |===
 
+IMPORTANT: Please tell me where I can report this bug or whether this behavior is expected or not.
 
 == How to run
 
