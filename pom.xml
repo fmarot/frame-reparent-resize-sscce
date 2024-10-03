@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.teamtter.poc</groupId>
+	<artifactId>frame-reparent-resize-sscce</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<jna.version>5.15.0</jna.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<!-- run with mvn compile package exec:java -->
+						<!-- 'default-cli' is the default goal in Maven cli-->
+						<id>default-cli</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<includeProjectDependencies>true</includeProjectDependencies>
+							<includePluginDependencies>false</includePluginDependencies>
+							<mainClass>com.sscce.tmp.JFrameSampleWithJava16Problem</mainClass>
+							<arguments>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- run with mvn clean compile exec:exec@NoProblem -->
+						<id>NoProblem</id>
+						<goals>
+							<!-- we cannot use the java goal due to the requirement for \-\-add-opens -->
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<!-- add-exports=java.desktop/sun.awt.windows=ALL-UNNAMED -->
+								<argument>--add-opens</argument>
+								<argument>java.desktop/sun.awt.windows=ALL-UNNAMED</argument>
+								<argument>-classpath</argument>
+								<!-- automatically creates the classpath using all project dependencies,
+									 also adding the project build directory -->
+								<classpath/>
+								<argument>com.sscce.tmp.NoProblem</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+				
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

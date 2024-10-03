@@ -1,0 +1,36 @@
+demo of problem when reparenting a JFrame
+=========================================
+:toc: macro
+
+toc::[]
+
+Note: a SSCCE is a Short, Self Contained, Correct (Compilable), Example - see https://sscce.org/
+
+Sample to demonstrate the problem of reparented JFrames when their parent frame moves: the reparented child frame also moves inside its parent, it doe snot only follow along. Like if it was moved twice.
+It seems lile the movement applied depends upon the upper left coordinate of the parent frame.
+This problem started in Java 16 and is not present up to Java 15.
+
+This problem is showcased in class JFrameSampleWithJava16Problem.java
+
+An alternative implementation in NoProblem.java uses a sun.awt.windows.WEmbeddedFrame and has no such weird behaviour.
+
+== How to run
+
+You need Maven and Java (tested from Java 11 to 21) and run with either of the methods:
+
+--------------------
+mvn clean compile exec:java     // will run the class with the problem
+--------------------
+
+Try to move the main Frame and on Java16+ you will see the child frame move inside the main Frame.
+
+--------------------
+mvn clean compile exec:exec@NoProblem	// will run the sample that has no problem
+--------------------
+
+This sample behaves correctly.
+
+
+== The hack
+
+In JFrameSampleWithJava16Problem.java, a boolean 'hackForJava16Plus' may be set to true to activate a hack hiding the problem on Java16+
