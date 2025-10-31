@@ -105,6 +105,10 @@ public class ChatGPT {
 		});
 	}
 
+	/** Selon chatGPT: construire la fentre principale dans un InvokeAndWait ne suffit pas toujours,
+	 * selon la charge graphique, le look & feel, la machine distante (ex : RDP, GPU, timing...),
+	 * le peer peut être créé légèrement plus tard... résultat : FindWindow(...) retourne null, et
+	 * ton reparenting échoue ou crée une fenêtre noire. */
 	private static HWND waitForWindowHandle(String title, long timeoutMs) {
 		long deadline = System.currentTimeMillis() + timeoutMs;
 		while (System.currentTimeMillis() < deadline) {

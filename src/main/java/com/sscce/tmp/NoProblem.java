@@ -62,7 +62,7 @@ public class NoProblem {
 		});
 
 		// Utilisation de JNA pour récupérer le handle natif (HWND) de la Frame principale
-		hwndMainFrame = User32.INSTANCE.FindWindow(null, MAIN_FRAME_NAME);
+		hwndMainFrame = waitForWindowHandle(MAIN_FRAME_NAME, 5000);
 
 		// Create a child JFrame and 'reparent' it inside the parent Frame (but not using Java
 		// because this sample demonstrate a generic use-case where the parent frame may be unrelated to Java)
@@ -89,6 +89,26 @@ public class NoProblem {
 			applet.add(button, BorderLayout.CENTER);
 			childFrame.setVisible(true);
 		});
+	}
+
+	/** Selon chatGPT: construire la fentre principale dans un InvokeAndWait ne suffit pas toujours,
+	 * selon la charge graphique, le look & feel, la machine distante (ex : RDP, GPU, timing...),
+	 * le peer peut être créé légèrement plus tard... résultat : FindWindow(...) retourne null, et
+	 * ton reparenting échoue ou crée une fenêtre noire.
+	 * Ainsi on fait une attente active. */
+	private static HWND waitForWindowHandle(String title, long timeoutMs) {
+		long deadline = System.currentTimeMillis() + timeoutMs;
+		while (System.currentTimeMillis() < deadline) {
+			HWND hwnd = User32.INSTANCE.FindWindow(null, title);
+			if (hwnd != null && Pointer.nativeValue(hwnd.getPointer()) != 0) {
+				return hwnd;
+			}
+			try {
+				Thread.sleep(100); // petit délai ; pas bloquer l'EDT ici (on est hors EDT)
+			} catch (InterruptedException ignored) {
+			}
+		}
+		return null;
 	}
 
 	private static void resizedChild() {
