@@ -10,12 +10,15 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 
 public class NoProblem {
 
 	// No need for hack in Java16+ + WEmbeddedFrame
 	// private static boolean hackForJava16Plus = false;
+
+	private static final String MAIN_FRAME_NAME = "Main Frame";
 
 	private static Frame	childFrame;
 
@@ -26,10 +29,10 @@ public class NoProblem {
 		return new Dimension(mainFrame.getWidth() - 80, mainFrame.getHeight() - 80);	// yeah, not very precise yet...
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 
-		SwingUtilities.invokeLater(() -> {
-			mainFrame = new Frame("Main Frame");
+		SwingUtilities.invokeAndWait(() -> {	// we have to 'wait' in order to obtain the hwndMainFrame once we are sure the window is displayed
+			mainFrame = new Frame(MAIN_FRAME_NAME);
 			mainFrame.setSize(400, 400);
 			mainFrame.setLayout(new BorderLayout());
 
@@ -59,12 +62,11 @@ public class NoProblem {
 		});
 
 		// Utilisation de JNA pour récupérer le handle natif (HWND) de la Frame principale
-		hwndMainFrame = User32.INSTANCE.FindWindow(null, "Main Frame");
+		hwndMainFrame = User32.INSTANCE.FindWindow(null, MAIN_FRAME_NAME);
 
 		// Create a child JFrame and 'reparent' it inside the parent Frame (but not using Java
 		// because this sample demonstrate a generic use-case where the parent frame may be unrelated to Java)
 		SwingUtilities.invokeLater(() -> {
-			childFrame = new JFrame("Internal JFrame");
 			String className = "sun.awt.windows.WEmbeddedFrame";
 			try {
 				// use class name because this class does not exist on Linux so  the code won't compile on Linux
@@ -86,11 +88,6 @@ public class NoProblem {
 			applet.setLayout(new BorderLayout());
 			applet.add(button, BorderLayout.CENTER);
 			childFrame.setVisible(true);
-
-			// Use JNA to get the window native handle
-			HWND hwndChild = User32.INSTANCE.FindWindow(null, "Internal Frame (WEmbeddedFrame)");
-
-			User32.INSTANCE.SetParent(hwndChild, hwndMainFrame);
 		});
 	}
 
